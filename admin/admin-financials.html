@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Management | LibroFlow Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --sidebar-width: 280px;
+            --bg-light: #f8fafc;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+        }
+
+        /* --- Sidebar (Admin Dark Theme) --- */
+       .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: #1e293b; /* Darker sidebar for Admin mode */
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .nav-link {
+            color: #94a3b8;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin: 0 15px 5px;
+            font-weight: 600;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff !important;
+        }
+
+        .nav-link.active { border-left: 4px solid var(--primary); }
+
+        /* --- Main Content --- */
+        .main-wrapper { margin-left: var(--sidebar-width); padding: 2rem; }
+
+        .finance-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .amount-highlight {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .badge-status {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .bg-paid { background: #dcfce7; color: #15803d; }
+        .bg-unpaid { background: #fee2e2; color: #b91c1c; }
+
+        .btn-action {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+   <div class="sidebar shadow">
+        <div class="p-4">
+            <h4 class="fw-bold text-white mb-5"><i class="bi bi-shield-check text-primary me-2"></i> LIBRO ADMIN</h4>
+            <nav class="nav flex-column">
+                <a href="admin-dashborad.html" class="nav-link"><i class="bi bi-speedometer2 me-2"></i> Overview</a>
+                <a href="admin-manage-books.html" class="nav-link"><i class="bi bi-book me-2"></i> Manage Books</a>
+                <a href="admin-members.html" class="nav-link"><i class="bi bi-people me-2"></i> Member Directory</a>
+                <a href="admin-transactions.html" class="nav-link"><i class="bi bi-arrow-left-right me-2"></i> Issue/Return</a>
+                <a href="admin-financials.html" class="nav-link active"><i class="bi bi-cash-stack me-2"></i> Financials</a>
+                <a href="admin-settings.html" class="nav-link"><i class="bi bi-gear me-2"></i> System Settings</a>
+            </nav>
+        </div>
+        <div class="mt-auto p-4">
+            <a href="admin-exit.html" class="nav-link text-danger"><i class="bi bi-power me-2"></i> System Exit</a>
+        </div>
+    </div>
+
+    <main class="main-wrapper">
+        <header class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-800 mb-1">Financial Oversight</h2>
+                <p class="text-muted small">Monitor revenue, fines, and payment settlements.</p>
+            </div>
+            <button class="btn btn-outline-primary fw-bold rounded-3">
+                <i class="bi bi-download me-2"></i> Export Financial Report
+            </button>
+        </header>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="finance-card shadow-sm border-start border-primary border-4">
+                    <p class="text-muted small fw-bold mb-1">TOTAL REVENUE (MONTHLY)</p>
+                    <div class="amount-highlight text-primary">₦1,240.50</div>
+                    <p class="text-success small mb-0 mt-2"><i class="bi bi-graph-up-arrow"></i> +12% from last month</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="finance-card shadow-sm border-start border-danger border-4">
+                    <p class="text-muted small fw-bold mb-1">PENDING FINES</p>
+                    <div class="amount-highlight text-danger">₦315.00</div>
+                    <p class="text-muted small mb-0 mt-2">42 Outstanding members</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="finance-card shadow-sm border-start border-success border-4">
+                    <p class="text-muted small fw-bold mb-1">COLLECTED TODAY</p>
+                    <div class="amount-highlight text-success">₦85.25</div>
+                    <p class="text-muted small mb-0 mt-2">12 Transactions processed</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-card shadow-sm">
+            <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0">Outstanding Fines</h5>
+                <div class="d-flex gap-2">
+                    <input type="text" class="form-control form-control-sm" placeholder="Search by Member ID..." style="width: 200px;">
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Member Name</th>
+                            <th>Book Title</th>
+                            <th>Days Overdue</th>
+                            <th>Fine Amount</th>
+                            <th>Status</th>
+                            <th class="text-end pe-4">Quick Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-bold">Mark Thompson</div>
+                                <div class="small text-muted">ID: LIB-2024-001</div>
+                            </td>
+                            <td>Atomic Habits</td>
+                            <td>5 Days</td>
+                            <td class="fw-bold text-danger">₦10.00</td>
+                            <td><span class="badge-status bg-unpaid">Unpaid</span></td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-action btn-success me-1">Mark Paid</button>
+                                <button class="btn btn-action btn-outline-secondary">Waive</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-bold">Emily Chen</div>
+                                <div class="small text-muted">ID: LIB-2024-088</div>
+                            </td>
+                            <td>The Silent Patient</td>
+                            <td>0 Days</td>
+                            <td class="fw-bold text-success">₦5.00</td>
+                            <td><span class="badge-status bg-paid">Paid</span></td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-action btn-light" disabled>Settled</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

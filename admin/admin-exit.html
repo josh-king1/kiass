@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Exit | LibroFlow Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --admin-dark: #0f172a;
+            --primary: #2563eb;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--admin-dark); /* Darker theme for admin security */
+            color: white;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .exit-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .spinner-ring {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 2rem;
+        }
+
+        .terminal-text {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            height: 60px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 10px 20px;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-cancel:hover {
+            color: white;
+            border-color: white;
+        }
+
+        .progress {
+            height: 6px;
+            background-color: #334155;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            background-color: var(--primary);
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="exit-card">
+        <div class="spinner-ring">
+            <div class="spinner-border text-primary" style="width: 100px; height: 100px; border-width: 8px;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <i class="bi bi-shield-lock-fill position-absolute top-50 start-50 translate-middle fs-2"></i>
+        </div>
+
+        <h2 class="fw-800 mb-2">Terminating Session</h2>
+        <p class="text-secondary small">Finalizing administrative logs and clearing cache...</p>
+
+        <div class="terminal-text" id="terminal">
+            > Initializing secure logout...<br>
+        </div>
+
+        <div class="progress">
+            <div id="exitProgress" class="progress-bar" role="progressbar" style="width: 0%"></div>
+        </div>
+        <div class="d-flex justify-content-between x-small text-secondary mb-4" style="font-size: 0.75rem;">
+            <span>Security Level: High</span>
+            <span id="percent">0%</span>
+        </div>
+
+        <div class="pt-2">
+            <a href="admin-dashborad.html" class="btn-cancel">
+                <i class="bi bi-x-circle me-2"></i> Cancel Exit
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const logs = [
+            "> Encrypting audit trail...",
+            "> Closing database connections...",
+            "> Flushing session tokens...",
+            "> Validating backup integrity...",
+            "> System exit authorized.",
+            "> Redirecting to gateway..."
+        ];
+
+        let progress = 0;
+        let logIndex = 0;
+        const progressBar = document.getElementById('exitProgress');
+        const percentText = document.getElementById('percent');
+        const terminal = document.getElementById('terminal');
+
+        const interval = setInterval(() => {
+            progress += 2;
+            progressBar.style.width = progress + '%';
+            percentText.innerText = progress + '%';
+
+            // Add terminal lines based on progress
+            if (progress % 20 === 0 && logIndex < logs.length) {
+                terminal.innerHTML += logs[logIndex] + "<br>";
+                logIndex++;
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+
+            if (progress >= 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    // Redirect to login page
+                    window.location.href = "login.html"; 
+                }, 800);
+            }
+        }, 80);
+    </script>
+</body>
+</html>

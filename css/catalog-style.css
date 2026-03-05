@@ -1,0 +1,32 @@
+/* Inherits sidebar and content styles from previous dashboard-style.css */
+
+.book-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 20px !important;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+}
+
+.book-cover {
+    height: 180px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+}
+
+.btn-white {
+    background: white;
+    border: 1px solid #e2e8f0;
+}
+
+/* Custom Checkbox Styling */
+.form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Input Search Focus */
+.input-group input:focus {
+    box-shadow: none;
+}

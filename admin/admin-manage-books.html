@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Books | LibroFlow Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --sidebar-width: 280px;
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* --- Admin Sidebar --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: #1e293b; /* Darker sidebar for Admin mode */
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .nav-link {
+            color: #94a3b8;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin: 0 15px 5px;
+            font-weight: 600;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff !important;
+        }
+
+        .nav-link.active { border-left: 4px solid var(--primary); }
+
+
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+        }
+
+        /* --- Inventory Specific UI --- */
+        .inventory-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .book-cover-sm {
+            width: 35px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .stock-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .status-available { background-color: #22c55e; }
+        .status-low { background-color: #f59e0b; }
+        .status-out { background-color: #ef4444; }
+
+        .search-box {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            width: 300px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+            margin-left: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar shadow">
+        <div class="p-4">
+            <h4 class="fw-bold text-white mb-5"><i class="bi bi-shield-check text-primary me-2"></i> LIBRO ADMIN</h4>
+            <nav class="nav flex-column">
+                <a href="admin-dashborad.html" class="nav-link"><i class="bi bi-speedometer2 me-2"></i> Overview</a>
+                <a href="admin-manage-books.html" class="nav-link active"><i class="bi bi-book me-2"></i> Manage Books</a>
+                <a href="admin-members.html" class="nav-link"><i class="bi bi-people me-2"></i> Member Directory</a>
+                <a href="admin-transactions.html" class="nav-link"><i class="bi bi-arrow-left-right me-2"></i> Issue/Return</a>
+                <a href="admin-financials.html" class="nav-link"><i class="bi bi-cash-stack me-2"></i> Financials</a>
+                <a href="admin-settings.html" class="nav-link"><i class="bi bi-gear me-2"></i> System Settings</a>
+            </nav>
+        </div>
+        <div class="mt-auto p-4">
+            <a href="admin-exit.html" class="nav-link text-danger"><i class="bi bi-power me-2"></i> System Exit</a>
+        </div>
+    </div>
+
+    <main class="main-wrapper">
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-800 mb-1">Book Inventory</h2>
+                <p class="text-muted small">Update stock, edit details, or add new acquisitions.</p>
+            </div>
+            <button class="btn btn-primary rounded-3 px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#addBookModal">
+                <i class="bi bi-plus-lg me-2"></i> Add New Book
+            </button>
+        </header>
+
+        <div class="d-flex justify-content-between mb-4">
+            <div class="search-box">
+                <i class="bi bi-search text-muted"></i>
+                <input type="text" placeholder="Search by ISBN, Title, or Author...">
+            </div>
+            <div class="d-flex gap-2">
+                <select class="form-select border-0 shadow-sm" style="width: 150px;">
+                    <option>All Categories</option>
+                    <option>Technology</option>
+                    <option>Fiction</option>
+                    <option>Science</option>
+                </select>
+                <button class="btn btn-white border shadow-sm"><i class="bi bi-filter me-2"></i>Filters</button>
+            </div>
+        </div>
+
+        <div class="inventory-card">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Book Details</th>
+                            <th>ISBN</th>
+                            <th>Category</th>
+                            <th>Stock Status</th>
+                            <th>Total Copies</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light p-1 me-3 rounded">
+                                        <i class="bi bi-book text-primary" style="font-size: 1.5rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">Atomic Habits</div>
+                                        <div class="text-muted small">James Clear</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><code class="text-dark">978-0735211292</code></td>
+                            <td><span class="badge bg-info-subtle text-info">Self-Help</span></td>
+                            <td>
+                                <span class="stock-indicator status-available"></span>
+                                <span class="small fw-600">Available</span>
+                            </td>
+                            <td><strong>12</strong> <small class="text-muted">/ 15</small></td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-light border"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-light border text-danger"><i class="bi bi-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light p-1 me-3 rounded">
+                                        <i class="bi bi-book text-primary" style="font-size: 1.5rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">The Pragmatic Programmer</div>
+                                        <div class="text-muted small">Andrew Hunt</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><code class="text-dark">978-0135957059</code></td>
+                            <td><span class="badge bg-primary-subtle text-primary">Technology</span></td>
+                            <td>
+                                <span class="stock-indicator status-out"></span>
+                                <span class="small fw-600">Out of Stock</span>
+                            </td>
+                            <td><strong>0</strong> <small class="text-muted">/ 5</small></td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-light border"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-light border text-danger"><i class="bi bi-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="addBookModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header border-0 p-4">
+                    <h5 class="fw-bold mb-0">Add New Acquisition</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 pt-0">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Book Title</label>
+                            <input type="text" class="form-control" placeholder="e.g. The Psychology of Money">
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label small fw-bold">Author</label>
+                                <input type="text" class="form-control" placeholder="Morgan Housel">
+                            </div>
+                            <div class="col">
+                                <label class="form-label small fw-bold">ISBN</label>
+                                <input type="text" class="form-control" placeholder="13-digit code">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Confirm & Add to Library</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

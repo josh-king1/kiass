@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrowing History | LibroFlow</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-soft: #eff6ff;
+            --sidebar-width: 280px;
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #e2e8f0;
+            z-index: 1000;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            padding: 12px 20px;
+            border-radius: 12px;
+            transition: all 0.2s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            margin: 0 15px 5px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--primary);
+            color: white !important;
+        }
+
+        /* --- Content Area --- */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+        }
+
+        /* --- History Specific UI --- */
+        .history-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .table thead { background-color: #f8fafc; }
+        .table thead th {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            padding: 1.25rem 1rem;
+        }
+
+        .table tbody td {
+            padding: 1.25rem 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .status-pill {
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .status-returned { background: #dcfce7; color: #15803d; }
+        .status-cancelled { background: #f1f5f9; color: #475569; }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            transition: 0.2s;
+        }
+
+        .filter-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .book-info-cell { display: flex; align-items: center; gap: 12px; }
+        .history-thumb {
+            width: 40px; height: 55px; background: #f1f5f9;
+            border-radius: 6px; display: flex; align-items: center; justify-content: center;
+        }
+
+        .user-profile-btn {
+            background: white; padding: 5px 15px 5px 5px; border-radius: 30px;
+            border: 1px solid #e2e8f0; display: flex; align-items: center; font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar shadow-sm">
+        <div class="p-4">
+            <h4 class="fw-bold text-primary mb-5"><i class="bi bi-book-half"></i> LIBROFLOW</h4>
+            <nav class="nav flex-column">
+                <a href="dashboard.html" class="nav-link"><i class="bi bi-grid-1x2-fill me-2"></i> Dashboard</a>
+                <a href="catalog.html" class="nav-link"><i class="bi bi-search me-2"></i> Search Catalog</a>
+                <a href="book-detail.html" class="nav-link"><i class="bi bi-journal-bookmark me-2"></i> My Books</a>
+                <a href="history.html" class="nav-link active"><i class="bi bi-clock-history me-2"></i> History</a>
+                <a href="fines.html" class="nav-link"><i class="bi bi-wallet2 me-2"></i> Fines</a>
+            </nav>
+        </div>
+        <div class="mt-auto p-4">
+            <a href="index.html" class="nav-link text-danger"><i class="bi bi-box-arrow-left me-2"></i> Logout</a>
+        </div>
+    </div>
+
+    <main class="main-wrapper">
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-800 mb-1">Borrowing History</h2>
+                <p class="text-muted small">View and manage your past library activity</p>
+            </div>
+            <div class="user-profile-btn">
+                <img src="https://ui-avatars.com/api/?name=Alex+Smith&background=2563eb&color=fff" class="rounded-circle me-2" width="35">
+                <span class="small">Alex Smith</span>
+            </div>
+        </header>
+
+        <div class="d-flex gap-2 mb-4">
+            <button class="filter-btn active" onclick="filterHistory('all', this)">All History</button>
+            <button class="filter-btn" onclick="filterHistory('returned', this)">Returned</button>
+            <button class="filter-btn" onclick="filterHistory('cancelled', this)">Cancelled</button>
+            
+            <div class="ms-auto position-relative">
+                <i class="bi bi-search position-absolute text-muted" style="top: 10px; left: 12px;"></i>
+                <input type="text" id="historySearch" onkeyup="searchHistory()" class="form-control form-control-sm ps-5 rounded-3" placeholder="Search past books..." style="width: 250px;">
+            </div>
+        </div>
+
+        <div class="history-card shadow-sm">
+            <div class="table-responsive">
+                <table class="table mb-0" id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Book Title</th>
+                            <th>Borrowed On</th>
+                            <th>Returned On</th>
+                            <th>Status</th>
+                            <th>Rating</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-status="returned">
+                            <td>
+                                <div class="book-info-cell">
+                                    <div class="history-thumb"><i class="bi bi-journal-text"></i></div>
+                                    <div>
+                                        <div class="fw-bold book-title">Don't Make Me Think</div>
+                                        <div class="extra-small text-muted">Steve Krug</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Sep 12, 2025</td>
+                            <td>Sep 25, 2025</td>
+                            <td><span class="status-pill status-returned">Returned</span></td>
+                            <td><div class="text-warning small"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i></div></td>
+                            <td><button class="btn btn-sm btn-light border rounded-3">Re-borrow</button></td>
+                        </tr>
+
+                        <tr data-status="returned">
+                            <td>
+                                <div class="book-info-cell">
+                                    <div class="history-thumb"><i class="bi bi-journal-text"></i></div>
+                                    <div>
+                                        <div class="fw-bold book-title">Design of Everyday Things</div>
+                                        <div class="extra-small text-muted">Don Norman</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Aug 05, 2025</td>
+                            <td>Aug 19, 2025</td>
+                            <td><span class="status-pill status-returned">Returned</span></td>
+                            <td><span class="text-muted small">Not rated</span></td>
+                            <td><button class="btn btn-sm btn-light border rounded-3">Re-borrow</button></td>
+                        </tr>
+
+                        <tr data-status="cancelled">
+                            <td>
+                                <div class="book-info-cell">
+                                    <div class="history-thumb"><i class="bi bi-x-circle"></i></div>
+                                    <div>
+                                        <div class="fw-bold book-title">Deep Work</div>
+                                        <div class="extra-small text-muted">Cal Newport</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Jul 10, 2025</td>
+                            <td>Jul 11, 2025</td>
+                            <td><span class="status-pill status-cancelled">Cancelled</span></td>
+                            <td>—</td>
+                            <td><button class="btn btn-sm btn-light border rounded-3">View Details</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Function to filter by Status
+        function filterHistory(status, btn) {
+            // 1. Update active button UI
+            let buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // 2. Filter Table Rows
+            let rows = document.querySelectorAll('#historyTable tbody tr');
+            rows.forEach(row => {
+                if (status === 'all') {
+                    row.style.display = '';
+                } else {
+                    // Check if row's data-status matches the clicked status
+                    row.style.display = row.getAttribute('data-status') === status ? '' : 'none';
+                }
+            });
+        }
+
+        // Function to Search by Text
+        function searchHistory() {
+            let input = document.getElementById("historySearch").value.toLowerCase();
+            let rows = document.querySelectorAll('#historyTable tbody tr');
+            
+            rows.forEach(row => {
+                let title = row.querySelector(".book-title").innerText.toLowerCase();
+                row.style.display = title.includes(input) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

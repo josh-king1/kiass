@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal | LibroFlow</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --admin-dark: #0f172a;
+            --admin-accent: #2563eb;
+            --bg-slate: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-slate);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            min-height: 550px;
+        }
+
+        .auth-side-brand {
+            background: var(--admin-dark);
+            color: white;
+            padding: 3rem;
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .auth-form-area {
+            padding: 3.5rem;
+            width: 60%;
+            position: relative;
+        }
+
+        .form-control {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 1rem;
+        }
+
+        .btn-admin {
+            background: var(--admin-dark);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            width: 100%;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-admin:hover {
+            background: var(--admin-accent);
+            transform: translateY(-2px);
+        }
+
+        .auth-toggle-link {
+            color: var(--admin-accent);
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .view-pane { display: none; }
+        .view-pane.active { display: block; animation: slideIn 0.4s ease forwards; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card">
+        <div class="auth-side-brand">
+            <h2 class="fw-800 mb-3"><i class="bi bi-shield-lock-fill"></i></h2>
+            <h3 class="fw-bold">LibroFlow Admin</h3>
+            <p class="text-white-50 small">Access the library management command center. Authenticate to manage inventory and members.</p>
+            <div class="mt-4 p-3 rounded-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <small class="d-block text-white-50">Authorized Personnel Only</small>
+                <span class="text-warning small"><i class="bi bi-info-circle me-1"></i> System logs IP addresses.</span>
+            </div>
+        </div>
+
+        <div class="auth-form-area">
+            
+            <div id="loginPane" class="view-pane active">
+                <h2 class="fw-800 mb-1">Staff Login</h2>
+                <p class="text-muted small mb-4">Enter your administrative credentials.</p>
+                
+                <form id="adminLoginForm">
+                    <label class="small fw-bold mb-1">Staff ID / Email</label>
+                    <input type="text" class="form-control" placeholder="AD-12345" required>
+                    
+                    <label class="small fw-bold mb-1">Security Password</label>
+                    <input type="password" class="form-control" placeholder="••••••••" required>
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                        <div class="form-check"><input type="checkbox" class="form-check-input"><label class="small">Remember Me</label></div>
+                        <a href="#" class="small text-muted">Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn-admin mb-3">Login to Dashboard</button>
+                </form>
+                <p class="text-center small">New librarian? <span class="auth-toggle-link" onclick="toggleAuth('signup')">Request Account</span></p>
+            </div>
+
+            <div id="signupPane" class="view-pane">
+                <h2 class="fw-800 mb-1">Request Admin Access</h2>
+                <p class="text-muted small mb-4">Submit your details for supervisor approval.</p>
+                
+                <form id="adminSignupForm">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="small fw-bold mb-1">First Name</label>
+                            <input type="text" class="form-control" placeholder="John">
+                        </div>
+                        <div class="col-6">
+                            <label class="small fw-bold mb-1">Last Name</label>
+                            <input type="text" class="form-control" placeholder="Doe">
+                        </div>
+                    </div>
+                    
+                    <label class="small fw-bold mb-1">Official Library Email</label>
+                    <input type="email" class="form-control" placeholder="j.doe@library.com">
+                    
+                    <label class="small fw-bold mb-1">Department</label>
+                    <select class="form-select form-control">
+                        <option>Archival Management</option>
+                        <option>Member Services</option>
+                        <option>IT & Systems</option>
+                    </select>
+
+                    <button type="submit" class="btn-admin mb-3">Submit Request</button>
+                </form>
+                <p class="text-center small">Already have access? <span class="auth-toggle-link" onclick="toggleAuth('login')">Sign In</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAuth(view) {
+            const login = document.getElementById('loginPane');
+            const signup = document.getElementById('signupPane');
+            
+            if(view === 'signup') {
+                login.classList.remove('active');
+                signup.classList.add('active');
+            } else {
+                signup.classList.remove('active');
+                login.classList.add('active');
+            }
+        }
+
+        // Form Submit Simulation
+        document.getElementById('adminLoginForm').onsubmit = (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span> Authenticating...`;
+            setTimeout(() => {
+                window.location.href = "admin-dashboard.html"; // Redirect to your joined master page
+            }, 1500);
+        };
+    </script>
+</body>
+</html>

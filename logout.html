@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout | LibroFlow</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-soft: #eff6ff;
+            --sidebar-width: 280px;
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar (Visual only for consistency) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #e2e8f0;
+            opacity: 0.6; /* Muted because user is logging out */
+            pointer-events: none; /* Disable interaction */
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            margin: 0 15px 5px;
+        }
+
+        /* --- Logout Center Card --- */
+        .logout-container {
+            margin-left: var(--sidebar-width);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid #e2e8f0;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .btn-relogin {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 12px 30px;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .btn-relogin:hover {
+            background-color: #1d4ed8;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .countdown-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar shadow-sm">
+        <div class="p-4">
+            <h4 class="fw-bold text-primary mb-5"><i class="bi bi-book-half"></i> LIBROFLOW</h4>
+            <nav class="nav flex-column">
+                <a href="#" class="nav-link"><i class="bi bi-grid-1x2-fill me-2"></i> Dashboard</a>
+                <a href="#" class="nav-link"><i class="bi bi-search me-2"></i> Search Catalog</a>
+                <a href="#" class="nav-link"><i class="bi bi-journal-bookmark me-2"></i> My Books</a>
+                <a href="#" class="nav-link"><i class="bi bi-clock-history me-2"></i> History</a>
+                <a href="#" class="nav-link"><i class="bi bi-wallet2 me-2"></i> Fines</a>
+            </nav>
+        </div>
+    </div>
+
+    <main class="logout-container">
+        <div class="logout-card">
+            <div class="icon-circle">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <h2 class="fw-800 mb-2">Logged Out</h2>
+            <p class="text-muted mb-4">You have been successfully logged out of your session. See you again soon, Alex!</p>
+            
+            <a href="login.html" class="btn-relogin">
+                <i class="bi bi-box-arrow-in-right me-2"></i> Login Again
+            </a>
+
+            <div class="countdown-text">
+                Redirecting to login in <span id="timer" class="fw-bold text-primary">10</span> seconds...
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Automatic redirection logic
+        let timeLeft = 10;
+        const timerElement = document.getElementById('timer');
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            timerElement.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                window.location.href = "login.html"; // Replace with your actual login page URL
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+:root {
+    --primary: #2563eb;
+    --bg-soft: #f1f5f9;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-soft);
+}
+
+.auth-container {
+    background: radial-gradient(circle at top left, #dbeafe, transparent);
+}
+
+.auth-card {
+    background: white;
+    border-radius: 24px;
+    border: none;
+}
+
+.auth-input {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.auth-input:focus {
+    background-color: white;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    outline: none;
+}
+
+.fw-800 { font-weight: 800; }
+.fw-600 { font-weight: 600; }
+
+.shadow-xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+}
+
+/* Benefit list styling on the left */
+.auth-benefit {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 20px;
+}
+
+/* Hover effects for buttons */
+.btn-primary {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    background-color: #1d4ed8;
+}
+
+@media (max-width: 768px) {
+    .auth-card {
+        border-radius: 16px;
+        margin: 15px;
+    }
+}
